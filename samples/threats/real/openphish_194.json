@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [c28101a66357]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "matamscklogins.webflow.io"
+                                ],
+                    "uris":  [
+                                 "http://matamscklogins.webflow.io/"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

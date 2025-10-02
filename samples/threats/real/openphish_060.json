@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [5ec7177f590f]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "www.casefb014143-b3kd.vercel.app"
+                                ],
+                    "uris":  [
+                                 "http://www.casefb014143-b3kd.vercel.app/"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

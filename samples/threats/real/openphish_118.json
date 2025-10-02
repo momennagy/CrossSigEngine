@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [ede08ae01a49]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "meta-support-safeid.pages.dev"
+                                ],
+                    "uris":  [
+                                 "http://meta-support-safeid.pages.dev/"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

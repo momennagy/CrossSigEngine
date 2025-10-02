@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [a2a27ec9a7d5]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "usgexmninlogen.gitbook.io"
+                                ],
+                    "uris":  [
+                                 "http://usgexmninlogen.gitbook.io/"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

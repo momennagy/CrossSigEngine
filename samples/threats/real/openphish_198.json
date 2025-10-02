@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [d8ef4f162689]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "epmoworx.com"
+                                ],
+                    "uris":  [
+                                 "https://epmoworx.com/wp-content/themes/twentynineteen/fonts/tmp/vm.html"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

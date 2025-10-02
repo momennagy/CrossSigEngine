@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/schemas/threat.schema.json",
+  "title": "ThreatModel",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "family": { "type": ["string", "null"] },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "sources": { "type": "array", "items": { "type": "string" } },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "file": {
+      "type": ["object", "null"],
+      "properties": {
+        "hashes": { "type": "array", "items": { "type": "string" } },
+        "strings": { "type": "array", "items": { "type": "string" } },
+        "hex_patterns": { "type": "array", "items": { "type": "string" } },
+        "pe_features": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "network": {
+      "type": ["object", "null"],
+      "properties": {
+        "domains": { "type": "array", "items": { "type": "string" } },
+        "ips": { "type": "array", "items": { "type": "string" } },
+        "uris": { "type": "array", "items": { "type": "string" } },
+        "ja3": { "type": "array", "items": { "type": "string" } },
+        "ports": { "type": "array", "items": { "type": "integer", "minimum": 1, "maximum": 65535 } }
+      },
+      "additionalProperties": false
+    },
+    "log": {
+      "type": ["object", "null"],
+      "properties": {
+        "windows": {
+          "type": ["object", "null"],
+          "properties": {
+            "event_id": { "type": "array", "items": { "type": "integer" } },
+            "cmdline_contains": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "behavioral": {
+      "type": ["object", "null"],
+      "properties": {
+        "mutexes": { "type": "array", "items": { "type": "string" } },
+        "registry_keys": { "type": "array", "items": { "type": "string" } },
+        "process_trees": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

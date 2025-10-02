@@ -1,0 +1,20 @@
+# Source control
+.git
+.gitignore
+.gitattributes
+
+# Build output
+**/bin/
+**/obj/
+**/out/
+
+# IDE
+.vs/
+.vscode/
+
+# Others
+**/.DS_Store
+**/node_modules/
+**/TestResults/
+**/*.user
+**/*.suo

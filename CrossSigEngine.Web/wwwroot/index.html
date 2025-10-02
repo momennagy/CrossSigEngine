@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CrossSigEngine Web</title>
+  <style>
+    :root { --bg:#0f172a; --fg:#fff; --muted:#64748b; --border:#e5e7eb; --card:#ffffff; --soft:#f8fafc; --accent:#2563eb; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #f1f5f9; }
+    header { background: var(--bg); color: var(--fg); padding: 16px 20px; }
+    main { padding: 16px 20px; max-width: 1100px; margin: 0 auto; }
+    .tabs { display: flex; gap: 10px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
+    .tab { padding: 8px 12px; cursor: pointer; border: 1px solid var(--border); border-bottom: none; border-radius: 8px 8px 0 0; background: var(--soft); }
+    .tab.active { background: #fff; font-weight: 600; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    textarea, input, select { width: 100%; padding: 8px; margin: 6px 0 12px; box-sizing: border-box; }
+    pre { background: #0a0a0a; color: #e5e7eb; padding: 12px; border-radius: 6px; overflow: auto; }
+    button { padding: 8px 12px; border: none; background: var(--accent); color: #fff; border-radius: 6px; cursor: pointer; }
+    button.secondary { background: #334155; }
+    button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    button:disabled { background: #9ca3af; cursor: not-allowed; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .hint { color: #57534e; font-size: 12px; }
+    .help { color: var(--muted); font-size: 13px; margin: 6px 0 12px; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .section-title { margin: 0 0 8px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px; border-bottom: 1px solid var(--border); text-align: left; }
+    .error { color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; padding: 8px; border-radius: 6px; }
+    .status { color: #075985; background: #f0f9ff; border: 1px solid #bae6fd; padding: 8px; border-radius: 6px; }
+    /* Getting started overlay */
+    .backdrop { position: fixed; inset: 0; background: rgba(2,6,23,0.6); display: none; align-items: center; justify-content: center; z-index: 50; }
+    .modal { background: #fff; border-radius: 12px; padding: 20px; width: min(720px, 90vw); box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .modal h3 { margin: 0 0 8px; }
+    .modal ol { margin: 8px 0 16px 20px; }
+    .modal .actions { justify-content: space-between; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CrossSigEngine Web</h1>
+    <div class="hint">Validate models, generate multi-family rules, and scan files with alerts — all from your browser.</div>
+  </header>
+  <main>
+    <div class="tabs">
+      <div class="tab active" data-tab="validate">Validate</div>
+      <div class="tab" data-tab="generate">Generate</div>
+      <div class="tab" data-tab="scan">Scan (upload)</div>
+      <div class="tab" data-tab="dirscan">Directory Scan</div>
+  <div class="tab" data-tab="threats">Threats</div>
+  <div class="tab" data-tab="sandbox">Sandbox</div>
+    </div>
+    <section id="validate" class="panel active">
+      <div class="card">
+        <h3 class="section-title">Validate ThreatModel</h3>
+        <div class="help">Paste your model or load a sample. Validation checks format and quality (hash shapes, string/hex lengths, etc.).</div>
+        <div class="row">
+          <div>
+            <label>Samples</label>
+            <select id="val-sample"></select>
+          </div>
+          <div class="actions" style="align-items:end">
+            <button id="val-load" class="secondary">Load sample</button>
+            <button id="val-save" class="ghost" title="Save to browser storage">Save</button>
+            <button id="val-restore" class="ghost" title="Load from browser storage">Restore</button>
+          </div>
+        </div>
+        <textarea id="val-json" rows="12" placeholder='{"name":"Sample", "file":{"strings":["abc"]}}'></textarea>
+        <div class="actions">
+          <button id="val-run">Validate</button>
+          <div id="val-msg"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Result</h4>
+        <div id="val-err" class="error" style="display:none"></div>
+        <pre id="val-out"></pre>
+      </div>
+    </section>
+
+    <section id="threats" class="panel">
+      <div class="card">
+        <h3 class="section-title">Threats Database</h3>
+        <div class="help">Search stored ThreatModel entries (seeded from samples on first run). You can view JSON or copy it for validation/generation.</div>
+        <div class="row">
+          <div>
+            <label>Query</label>
+            <input id="th-q" placeholder="name, family, JSON contains…" />
+          </div>
+          <div>
+            <label>Family</label>
+            <input id="th-family" placeholder="e.g., Malware, Demo" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Tag contains</label>
+            <input id="th-tag" placeholder="tag or free text (CSV and JSON searched)" />
+          </div>
+          <div class="actions" style="align-items:end">
+            <button id="th-search">Search</button>
+            <button id="th-clear" class="ghost">Clear</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Results</h4>
+        <div id="th-err" class="error" style="display:none"></div>
+        <div class="actions" style="margin-bottom:8px">
+          <input id="th-import" type="file" multiple accept=".json" />
+          <button id="th-import-run" class="ghost">Import JSON</button>
+          <button id="th-export" class="ghost">Export CSV</button>
+        </div>
+        <div class="row">
+          <div>
+            <label>Server path import (admin/dev)</label>
+            <input id="th-path" placeholder="e.g., C:\\data\\models or ..\\samples\\threats" />
+          </div>
+          <div style="align-self:end">
+            <label style="display:flex; gap:8px; align-items:center"><input type="checkbox" id="th-path-rec" /> Recursive</label>
+            <div class="actions" style="margin-top:8px"><button id="th-path-run" class="ghost">Import from server path</button></div>
+          </div>
+        </div>
+        <div id="th-table" class="hint">No results yet.</div>
+        <pre id="th-json" style="display:none"></pre>
+      </div>
+    </section>
+
+    <section id="sandbox" class="panel">
+      <div class="card">
+        <h3 class="section-title">Sandbox (VirusTotal or Cuckoo)</h3>
+        <div class="help">Analyze files or URLs with VirusTotal (free key) or a self-hosted Cuckoo instance. Results may take a few seconds.</div>
+        <div class="row">
+          <div>
+            <label>Provider</label>
+            <select id="sb-provider"><option value="vt">VirusTotal</option><option value="cuckoo">Cuckoo</option></select>
+          </div>
+          <div>
+            <label>API key (or set VT_API_KEY on server)</label>
+            <input id="sb-apikey" placeholder="vt api key (optional if server has VT_API_KEY)" />
+          </div>
+        </div>
+        <div class="row" id="sb-baseurl-wrap" style="display:none">
+          <div>
+            <label>Cuckoo Base URL</label>
+            <input id="sb-baseurl" placeholder="http://localhost:8090/api/" />
+          </div>
+          <div class="help" style="align-self:end">Example: http://localhost:8090/api/ (include trailing slash)</div>
+        </div>
+
+        <h4>Analyze a file</h4>
+        <input id="sb-file" type="file" />
+        <div class="actions">
+          <button id="sb-file-run">Analyze file</button>
+          <div id="sb-file-err" class="error" style="display:none"></div>
+        </div>
+
+        <h4>Analyze a URL</h4>
+        <input id="sb-url" placeholder="https://example.com/payload" />
+        <div class="actions">
+          <button id="sb-url-run">Analyze URL</button>
+          <div id="sb-url-err" class="error" style="display:none"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Result</h4>
+        <div id="sb-summary" class="status" style="display:none"></div>
+        <div class="actions" style="margin-bottom:8px">
+          <button id="sb-copy" class="ghost">Copy JSON</button>
+        </div>
+        <pre id="sb-out" style="display:none"></pre>
+      </div>
+    </section>
+
+    <section id="generate" class="panel">
+      <div class="card">
+        <h3 class="section-title">Generate Rules</h3>
+        <div class="help">Pick a family (or "all"), paste or load a model, then Generate. Artifacts appear below.</div>
+        <div class="row">
+          <div>
+            <label>Family</label>
+            <select id="gen-family">
+              <option value="all">all</option>
+              <option value="yara">yara</option>
+              <option value="snort">snort</option>
+              <option value="suricata">suricata</option>
+              <option value="sigma">sigma</option>
+              <option value="clamav">clamav</option>
+              <option value="ioc">ioc</option>
+              <option value="peid">peid</option>
+              <option value="custom">custom</option>
+              <option value="zeek">zeek</option>
+            </select>
+          </div>
+          <div>
+            <label>Samples</label>
+            <select id="gen-sample"></select>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="gen-load" class="secondary">Load sample</button>
+          <button id="gen-run">Generate</button>
+          <button id="gen-copy" class="ghost">Copy JSON</button>
+        </div>
+        <textarea id="gen-json" rows="12" placeholder='{"name":"Sample","file":{"strings":["abc"]}}'></textarea>
+      </div>
+      <div class="card">
+        <h4>Artifacts (filename → content)</h4>
+        <div id="gen-err" class="error" style="display:none"></div>
+        <div class="actions" style="margin-bottom:8px">
+          <button id="gen-copy-art" class="ghost">Copy All</button>
+        </div>
+        <pre id="gen-out"></pre>
+      </div>
+    </section>
+
+    <section id="scan" class="panel">
+      <div class="card">
+        <h3 class="section-title">Scan a File (upload)</h3>
+        <div class="help">Upload a single file to scan on the server. Use the Directory tab for folders.</div>
+        <div class="row">
+          <div>
+            <label>Samples</label>
+            <select id="scan-sample"></select>
+          </div>
+          <div class="actions" style="align-items:end">
+            <button id="scan-load" class="secondary">Load sample</button>
+          </div>
+        </div>
+        <textarea id="scan-json" rows="12" placeholder='{"name":"Sample","file":{"strings":["abc"],"hex_patterns":["61 62 63"]}}'></textarea>
+        <input id="scan-file" type="file" />
+        <div class="actions">
+          <button id="scan-run">Scan</button>
+          <div id="scan-err" class="error" style="display:none"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Matches</h4>
+        <div class="actions" style="margin-bottom:8px">
+          <button id="scan-copy" class="ghost">Copy JSON</button>
+          <button id="scan-download" class="ghost">Download JSON</button>
+        </div>
+        <div id="scan-table"></div>
+        <pre id="scan-out" style="display:none"></pre>
+      </div>
+    </section>
+
+    <section id="dirscan" class="panel">
+      <div class="card">
+        <h3 class="section-title">Directory Scan</h3>
+        <div class="help">Scans run on the server. Use absolute paths (e.g., <code>C:\\targets</code>) or a path relative to the app (e.g., <code>..\\out</code>).</div>
+        <div class="actions" style="margin-bottom:8px">
+          <button id="ds-path-out" class="ghost" title="Set to repo out folder">Use ..\\out</button>
+          <button id="ds-path-samples" class="ghost" title="Set to repo samples folder">Use ..\\..\\samples</button>
+        </div>
+        <div class="row">
+          <div>
+            <label>Path</label>
+            <input id="ds-path" placeholder="C:\\targets or ..\\out" />
+          </div>
+          <div>
+            <label>Recursive</label>
+            <select id="ds-recursive"><option value="false">false</option><option value="true">true</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Parallel</label>
+            <input id="ds-parallel" type="number" min="1" value="1" />
+          </div>
+          <div>
+            <label>Max file size (bytes)</label>
+            <input id="ds-max" type="number" min="0" value="0" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Exclude globs (comma separated)</label>
+            <input id="ds-exclude" placeholder="*.iso,*.zip" />
+          </div>
+          <div>
+            <label>Fail on match</label>
+            <select id="ds-fail"><option value="false">false</option><option value="true">true</option></select>
+          </div>
+        </div>
+        <h4>Webhook (optional)</h4>
+        <div class="row">
+          <div>
+            <label>Webhook URL</label>
+            <input id="ds-webhook" placeholder="http://localhost:8080/ or https://yourname.free.beeceptor.com" />
+          </div>
+          <div>
+            <label>Format</label>
+            <select id="ds-webhook-format"><option value="json">json</option><option value="slack">slack</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Headers (key: value per line)</label>
+            <textarea id="ds-webhook-headers" rows="4" placeholder="Authorization: Bearer ..."></textarea>
+          </div>
+          <div>
+            <label>Delay ms</label>
+            <input id="ds-webhook-delay" type="number" min="0" value="0" />
+          </div>
+        </div>
+        <div class="actions" style="margin-bottom:8px">
+          <button id="ds-webhook-test" class="ghost" title="Send a test POST">Test webhook</button>
+          <span class="hint">Tip: On Windows, you may need URLACL for localhost HttpListener. See README.</span>
+        </div>
+        <label>Windows Event Log source (optional)</label>
+        <input id="ds-eventlog" placeholder="CrossSigEngine" />
+
+        <h4>ThreatModel JSON</h4>
+        <div class="row">
+          <div>
+            <label>Samples</label>
+            <select id="ds-sample"></select>
+          </div>
+          <div class="actions" style="align-items:end">
+            <button id="ds-load" class="secondary">Load sample</button>
+          </div>
+        </div>
+        <textarea id="ds-json" rows="12" placeholder='{"name":"Sample","file":{"strings":["abc"]}}'></textarea>
+        <div class="actions">
+          <button id="ds-run">Run directory scan</button>
+          <div id="ds-err" class="error" style="display:none"></div>
+          <div id="ds-status" class="status" style="display:none"></div>
+        </div>
+      </div>
+      <div class="card" id="ds-recents-card" style="display:none">
+        <h4>Recent scans</h4>
+        <div class="actions" style="margin-bottom:8px">
+          <button id="ds-recents-clear" class="ghost">Clear list</button>
+        </div>
+        <div id="ds-recents-table" class="hint">No recent scans yet.</div>
+      </div>
+      <div class="card">
+        <h4>Results</h4>
+        <div class="actions" style="margin-bottom:8px">
+          <button id="ds-copy" class="ghost">Copy JSON</button>
+          <button id="ds-download" class="ghost">Download JSON</button>
+        </div>
+        <div id="ds-table"></div>
+        <pre id="ds-out" style="display:none"></pre>
+      </div>
+    </section>
+  </main>
+
+  <!-- Getting started overlay -->
+  <div id="gs" class="backdrop">
+    <div class="modal">
+      <h3>Welcome to CrossSigEngine Web</h3>
+      <div class="help">Here’s a quick 1-minute tour to get you scanning fast:</div>
+      <ol>
+        <li>Go to <b>Validate</b>, pick a sample, and Validate to see what the model looks like.</li>
+        <li>Go to <b>Generate</b> and choose a family (or "all") to render artifacts.</li>
+        <li>Try <b>Scan (upload)</b> with a file, or use <b>Directory Scan</b> and click <code>Use ..\\out</code> for a demo.</li>
+        <li>(Optional) Set a <b>Webhook URL</b> and click <b>Test webhook</b> to verify alerts delivery.</li>
+      </ol>
+      <div class="actions">
+        <label style="display:flex; align-items:center; gap:8px"><input id="gs-hide" type="checkbox" /> Don’t show again</label>
+        <div>
+          <button id="gs-start">Start</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+    tabs.forEach(t => t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      panels.forEach(p => p.classList.remove('active'));
+      document.getElementById(t.dataset.tab).classList.add('active');
+    }));
+
+    function pretty(x) { try { return JSON.stringify(x, null, 2); } catch { return String(x); } }
+    function setBusy(btn, busy, labelBusy) {
+      if (!btn) return;
+      btn.disabled = !!busy;
+      if (busy) { btn.dataset.label = btn.textContent; btn.textContent = labelBusy || 'Working…'; }
+      else if (btn.dataset.label) { btn.textContent = btn.dataset.label; delete btn.dataset.label; }
+    }
+    function copyText(text) { navigator.clipboard?.writeText(text).catch(()=>{}); }
+  function download(filename, text){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text],{type:'application/json'})); a.download = filename; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 1000); }
+    function tableFromMatches(events){
+      if (!Array.isArray(events) || events.length===0) return '<div class="hint">No matches.</div>';
+      const rows = events.map(e => `<tr><td>${escapeHtml(e.filePath||'')}</td><td>${escapeHtml(e.indicatorType||'')}</td><td>${escapeHtml(e.indicator||'')}</td><td>${e.offset ?? ''}</td></tr>`).join('');
+      return `<table><thead><tr><th>File</th><th>Type</th><th>Indicator</th><th>Offset</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
+    async function threatsSearch(){
+      const q = document.getElementById('th-q').value.trim();
+      const f = document.getElementById('th-family').value.trim();
+      const tag = document.getElementById('th-tag').value.trim();
+      const params = new URLSearchParams();
+      if(q) params.set('q', q); if(f) params.set('family', f); if(tag) params.set('tag', tag);
+      try{
+        const res = await fetch('/api/threats?' + params.toString());
+        const text = await res.text(); let data; try{ data = JSON.parse(text);}catch{ data = text; }
+        if(!res.ok) throw new Error(text||('HTTP '+res.status));
+        const items = (data && data.items) || [];
+        if(!items.length){ document.getElementById('th-table').innerHTML = '<div class="hint">No results.</div>'; return; }
+        const rows = items.map(e=>{
+          const tags = (e.tagsCsv||'').split(',').filter(x=>x).join(', ');
+          return `<tr><td>${e.id}</td><td>${escapeHtml(e.name||'')}</td><td>${escapeHtml(e.family||'')}</td><td>${escapeHtml(tags)}</td><td>${new Date(e.createdUtc).toLocaleString()}</td><td><button class='ghost th-view' data-id='${e.id}'>View JSON</button></td></tr>`;
+        }).join('');
+        document.getElementById('th-table').innerHTML = `<table><thead><tr><th>ID</th><th>Name</th><th>Family</th><th>Tags</th><th>Created</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+        document.querySelectorAll('.th-view').forEach(btn=>{
+          btn.addEventListener('click', async ()=>{
+            const id = btn.getAttribute('data-id');
+            const r = await fetch('/api/threats/'+id); const t = await r.text(); let j; try{ j = JSON.parse(t);}catch{ j=t; }
+            if(!r.ok) { alert('Fetch failed: '+t); return; }
+            const pre = document.getElementById('th-json'); pre.style.display='block';
+            let content = j && j.json ? j.json : j;
+            try { content = JSON.stringify(JSON.parse(content), null, 2); } catch {}
+            pre.textContent = content;
+          });
+        });
+      }catch(err){ const e = document.getElementById('th-err'); e.textContent = (err&&err.message)||String(err); e.style.display='block'; }
+    }
+    document.getElementById('th-search').onclick = threatsSearch;
+    document.getElementById('th-clear').onclick = ()=>{ document.getElementById('th-q').value=''; document.getElementById('th-family').value=''; document.getElementById('th-tag').value=''; document.getElementById('th-table').innerHTML='<div class="hint">No results yet.</div>'; document.getElementById('th-json').style.display='none'; };
+
+    // Threats import/export
+    document.getElementById('th-export').onclick = async ()=>{ const r = await fetch('/api/threats/export'); const b = await r.blob(); const url = URL.createObjectURL(b); const a=document.createElement('a'); a.href=url; a.download='threats.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 1000); };
+    document.getElementById('th-import-run').onclick = async ()=>{
+      const input = document.getElementById('th-import');
+      if(!input.files || input.files.length===0){ alert('Pick one or more .json files.'); return; }
+      const fd = new FormData();
+      Array.from(input.files).forEach(f=>fd.append('files', f));
+      const btn = document.getElementById('th-import-run'); setBusy(btn,true,'Importing…');
+      try{ const r = await fetch('/api/threats/import',{ method:'POST', body: fd }); const t = await r.text(); let j; try{ j=JSON.parse(t);}catch{ j=t; }
+        if(!r.ok) throw new Error(t||('HTTP '+r.status));
+        alert(`Imported: ${j.imported||0}, Skipped: ${j.skipped||0}`);
+        threatsSearch();
+      }catch(err){ alert('Import failed: '+((err&&err.message)||String(err))); }
+      finally{ setBusy(btn,false); }
+    };
+
+    // Server path import
+    document.getElementById('th-path-run').onclick = async ()=>{
+      const p = document.getElementById('th-path').value.trim();
+      const rec = document.getElementById('th-path-rec').checked;
+      if(!p){ alert('Enter a server path'); return; }
+      const btn = document.getElementById('th-path-run'); setBusy(btn,true,'Importing…');
+      try{
+        const r = await fetch('/api/threats/import-path', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ path: p, recursive: !!rec, pattern: '*.json' }) });
+        const t = await r.text(); let j; try{ j=JSON.parse(t);}catch{ j=t; }
+        if(!r.ok) throw new Error(t||('HTTP '+r.status));
+        alert(`Imported: ${j.imported||0} / Total: ${j.total||0} (Skipped: ${j.skipped||0})`);
+        threatsSearch();
+      }catch(err){ alert('Import-path failed: '+((err&&err.message)||String(err))); }
+      finally{ setBusy(btn,false); }
+    };
+
+    // Recents helpers (Directory Scan)
+    const RECENTS_KEY_DIR = 'cse_recents_dir';
+    function getRecents(key){ try{ return JSON.parse(localStorage.getItem(key)||'[]'); }catch{ return []; } }
+    function setRecents(key, list){ try{ localStorage.setItem(key, JSON.stringify(list)); }catch{} }
+    function addRecentDirScan(entry){
+      const list = getRecents(RECENTS_KEY_DIR);
+      list.unshift(entry);
+      while(list.length>20) list.pop();
+      setRecents(RECENTS_KEY_DIR, list);
+      renderDirRecents();
+    }
+    function renderDirRecents(){
+      const wrap = document.getElementById('ds-recents-card');
+      const host = document.getElementById('ds-recents-table');
+      const list = getRecents(RECENTS_KEY_DIR);
+      if(!list.length){ if(wrap) wrap.style.display='none'; return; }
+      if(wrap) wrap.style.display='block';
+      const rows = list.map((r,i)=>{
+        const d = new Date(r.ts).toLocaleString();
+        const path = escapeHtml(r.path||'');
+        const cnt = (r.result && r.result.count) || ((r.result && r.result.matches && r.result.matches.length) || 0);
+        return `<tr><td>${d}</td><td>${path}</td><td>${cnt}</td><td><button data-idx="${i}" class="ghost ds-view">View JSON</button></td></tr>`;
+      }).join('');
+      if(host) host.innerHTML = `<table><thead><tr><th>When</th><th>Path</th><th>Matches</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+      // Attach view handlers
+      if(host) host.querySelectorAll('.ds-view').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const idx = parseInt(btn.dataset.idx);
+          const item = getRecents(RECENTS_KEY_DIR)[idx];
+          if(!item) return;
+          document.getElementById('ds-out').textContent = pretty(item.result||{});
+          document.getElementById('ds-table').innerHTML = tableFromMatches((item.result && item.result.matches) || []);
+        });
+      });
+    }
+
+    // Minimal built-in samples (templates) for quick start
+    const SAMPLES = {
+      phishingkit: { name: "Phishing Kit", family: "Demo", file: { strings: ["Secure Login","login.php"], hex_patterns:["3C 66 6F 72 6D"] } },
+      emotet: { name: "Emotet Loader", family: "Malware", file: { strings:["Emotet"], hashes:["44d88612fea8a8f36de82e1278abb02f"] } },
+      cobaltstrike: { name: "CobaltStrike Beacon", family:"Malware", file:{ strings:["pid","beacon"], hex_patterns:["62 65 61 63 6F 6E"] } },
+      agenttesla: { name:"AgentTesla", family:"Malware", file:{ strings:["AgentTesla"], hex_patterns:["41 67 65 6E 74"] } },
+      trickbot: { name:"TrickBot", family:"Malware", file:{ strings:["TrickBot"], hex_patterns:["54 72 69 63 6B"] } }
+    };
+    function fillSamples(selectId){
+      const sel = document.getElementById(selectId); if (!sel) return;
+      sel.innerHTML = Object.keys(SAMPLES).map(k => `<option value="${k}">${k}</option>`).join('');
+    }
+    function loadSample(selectId, textareaId){ const key = document.getElementById(selectId).value; document.getElementById(textareaId).value = pretty(SAMPLES[key]); }
+    function saveLocal(key, textareaId){ try{ localStorage.setItem(key, document.getElementById(textareaId).value);}catch{} }
+    function loadLocal(key, textareaId){ try{ const v=localStorage.getItem(key); if(v) document.getElementById(textareaId).value=v;}catch{} }
+
+    // Persist Sandbox API key
+    const SB_APIKEY_KEY = 'cse_sb_apikey';
+    const SB_BASEURL_KEY = 'cse_sb_baseurl';
+    (function(){
+      const el = document.getElementById('sb-apikey');
+      if(el){
+        const saved = localStorage.getItem(SB_APIKEY_KEY) || '';
+        if(!el.value) el.value = saved;
+        el.addEventListener('input', ()=>{ try{ localStorage.setItem(SB_APIKEY_KEY, el.value.trim()); }catch{} });
+      }
+      const bu = document.getElementById('sb-baseurl');
+      if(bu){ const saved = localStorage.getItem(SB_BASEURL_KEY) || ''; if(!bu.value) bu.value = saved; bu.addEventListener('input', ()=>{ try{ localStorage.setItem(SB_BASEURL_KEY, bu.value.trim()); }catch{} }); }
+      const provSel = document.getElementById('sb-provider');
+      const buWrap = document.getElementById('sb-baseurl-wrap');
+      function toggleProvider(){ const p = provSel.value; if(buWrap) buWrap.style.display = (p==='cuckoo') ? 'grid' : 'none'; }
+      if(provSel){ provSel.addEventListener('change', toggleProvider); toggleProvider(); }
+    })();
+
+    // Initialize samples
+    fillSamples('val-sample'); fillSamples('gen-sample'); fillSamples('scan-sample'); fillSamples('ds-sample');
+    // Initialize recents & overlay
+    renderDirRecents();
+    const btnClearRec = document.getElementById('ds-recents-clear');
+    if(btnClearRec){ btnClearRec.onclick = ()=>{ setRecents(RECENTS_KEY_DIR, []); renderDirRecents(); }; }
+    (function(){ const hide = localStorage.getItem('cse_hide_gs')==='1'; const el = document.getElementById('gs'); if(!hide && el){ el.style.display='flex'; }
+      const start = document.getElementById('gs-start'); const chk = document.getElementById('gs-hide');
+      if(start){ start.onclick = ()=>{ if(chk && chk.checked) localStorage.setItem('cse_hide_gs','1'); el.style.display='none'; }; }
+    })();
+    // Sample loaders & local storage
+    document.getElementById('val-load').onclick = () => loadSample('val-sample','val-json');
+    document.getElementById('gen-load').onclick = () => loadSample('gen-sample','gen-json');
+    document.getElementById('scan-load').onclick = () => loadSample('scan-sample','scan-json');
+    document.getElementById('ds-load').onclick = () => loadSample('ds-sample','ds-json');
+    document.getElementById('val-save').onclick = () => saveLocal('val-json','val-json');
+    document.getElementById('val-restore').onclick = () => loadLocal('val-json','val-json');
+
+    document.getElementById('val-run').onclick = async () => {
+      const json = document.getElementById('val-json').value || '{}';
+      const btn = document.getElementById('val-run'); setBusy(btn, true, 'Validating…');
+      document.getElementById('val-err').style.display='none';
+      try{
+        const res = await fetch('/api/validate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: json });
+        if(!res.ok){ const t = await res.text(); throw new Error(t||('HTTP '+res.status)); }
+        const data = await res.json();
+        document.getElementById('val-out').textContent = pretty(data);
+      }catch(err){ const msg = (err && err.message)||String(err); const e = document.getElementById('val-err'); e.textContent = msg; e.style.display='block'; }
+      finally{ setBusy(btn,false); }
+    };
+
+    document.getElementById('gen-run').onclick = async () => {
+      const fam = document.getElementById('gen-family').value;
+      const json = document.getElementById('gen-json').value || '{}';
+      const btn = document.getElementById('gen-run'); setBusy(btn, true, 'Generating…');
+      document.getElementById('gen-err').style.display='none';
+      try{
+        const res = await fetch('/api/generate?family=' + encodeURIComponent(fam), { method: 'POST', headers: { 'content-type': 'application/json' }, body: json });
+        const text = await res.text();
+        if(!res.ok) throw new Error(text||('HTTP '+res.status));
+        let data; try{ data = JSON.parse(text);}catch{ data = text; }
+        document.getElementById('gen-out').textContent = pretty(data);
+      }catch(err){ const e = document.getElementById('gen-err'); e.textContent = (err && err.message)||String(err); e.style.display='block'; }
+      finally{ setBusy(btn,false); }
+    };
+    document.getElementById('gen-copy').onclick = () => copyText(document.getElementById('gen-json').value);
+    document.getElementById('gen-copy-art').onclick = () => copyText(document.getElementById('gen-out').textContent);
+
+    document.getElementById('scan-run').onclick = async () => {
+      const model = document.getElementById('scan-json').value || '{}';
+      const file = document.getElementById('scan-file').files[0];
+      if (!file) { alert('Pick a file'); return; }
+      const btn = document.getElementById('scan-run'); setBusy(btn, true, 'Scanning…');
+      const fd = new FormData();
+      fd.append('model', model);
+      fd.append('file', file);
+      document.getElementById('scan-err').style.display='none';
+      try{
+        const res = await fetch('/api/scan/upload', { method: 'POST', body: fd });
+        const text = await res.text();
+        if(!res.ok) throw new Error(text||('HTTP '+res.status));
+        let data; try{ data = JSON.parse(text);}catch{ data = text; }
+        const matches = (data && data.matches) || [];
+        document.getElementById('scan-table').innerHTML = tableFromMatches(matches);
+        document.getElementById('scan-out').textContent = pretty(data);
+      }catch(err){ const e = document.getElementById('scan-err'); e.textContent = (err && err.message)||String(err); e.style.display='block'; }
+      finally{ setBusy(btn,false); }
+    };
+    document.getElementById('scan-copy').onclick = () => copyText(document.getElementById('scan-out').textContent);
+    document.getElementById('scan-download').onclick = () => download('scan-results.json', document.getElementById('scan-out').textContent);
+
+    // Quick path presets
+    document.getElementById('ds-path-out').onclick = () => { document.getElementById('ds-path').value = '..\\out'; };
+    document.getElementById('ds-path-samples').onclick = () => { document.getElementById('ds-path').value = '..\\..\\samples'; };
+
+    // Webhook test
+    document.getElementById('ds-webhook-test').onclick = async ()=>{
+      const url = document.getElementById('ds-webhook').value.trim(); if(!url){ alert('Set Webhook URL'); return; }
+      const btn = document.getElementById('ds-webhook-test'); setBusy(btn,true,'Testing…');
+      try{
+        const headers = {}; const raw = document.getElementById('ds-webhook-headers').value; raw.split('\n').forEach(line=>{ const i=line.indexOf(':'); if(i>0) headers[line.slice(0,i).trim()] = line.slice(i+1).trim(); });
+        const res = await fetch(url, { method:'POST', headers: { 'content-type':'application/json', ...headers }, body: JSON.stringify({ text:'CrossSigEngine webhook test', timestamp: new Date().toISOString() }) });
+        alert('Webhook test: HTTP '+res.status);
+      }catch(err){ alert('Webhook test failed: '+((err&&err.message)||String(err))); }
+      finally{ setBusy(btn,false); }
+    };
+
+    document.getElementById('ds-run').onclick = async () => {
+      const model = document.getElementById('ds-json').value || '{}';
+      const body = {
+        model,
+        path: document.getElementById('ds-path').value || '',
+        recursive: document.getElementById('ds-recursive').value === 'true',
+        parallel: parseInt(document.getElementById('ds-parallel').value || '1'),
+        maxFileSizeBytes: parseInt(document.getElementById('ds-max').value || '0'),
+        failOnMatch: document.getElementById('ds-fail').value === 'true',
+      };
+      const exclude = (document.getElementById('ds-exclude').value || '').split(',').map(s => s.trim()).filter(Boolean);
+      if (exclude.length) body.exclude = exclude;
+      const webhook = document.getElementById('ds-webhook').value.trim();
+      if (webhook) {
+        body.webhook = webhook;
+        body.webhookFormat = document.getElementById('ds-webhook-format').value;
+        body.webhookDelayMs = parseInt(document.getElementById('ds-webhook-delay').value || '0');
+        const headersRaw = document.getElementById('ds-webhook-headers').value;
+        const headers = {};
+        headersRaw.split('\n').forEach(line => {
+          const idx = line.indexOf(':');
+          if (idx > 0) headers[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
+        });
+        if (Object.keys(headers).length) body.webhookHeaders = headers;
+      }
+      const evSrc = document.getElementById('ds-eventlog').value.trim();
+      if (evSrc) body.eventLogSource = evSrc;
+
+      const btn = document.getElementById('ds-run'); setBusy(btn,true,'Scanning…');
+      document.getElementById('ds-err').style.display='none';
+      document.getElementById('ds-status').style.display='none';
+      try{
+        const res = await fetch('/api/scan/path', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        const text = await res.text();
+        let data; try{ data = JSON.parse(text);}catch{ data = text; }
+        if(!res.ok) throw new Error(text||('HTTP '+res.status));
+        const matches = (data && data.matches) || [];
+        document.getElementById('ds-table').innerHTML = tableFromMatches(matches);
+        document.getElementById('ds-out').textContent = pretty(data);
+        const status = document.getElementById('ds-status'); status.textContent = `Scan complete. Matches: ${matches.length}`; status.style.display='block';
+        addRecentDirScan({ ts: Date.now(), path: body.path, result: data });
+      }catch(err){ const e = document.getElementById('ds-err'); e.textContent = (err && err.message)||String(err); e.style.display='block'; }
+      finally{ setBusy(btn,false); }
+    };
+    document.getElementById('ds-copy').onclick = () => copyText(document.getElementById('ds-out').textContent);
+    document.getElementById('ds-download').onclick = () => download('dirscan-results.json', document.getElementById('ds-out').textContent);
+
+    // Sandbox handlers
+    async function sandboxAfter(res){
+      const text = await res.text();
+      let data; try{ data = JSON.parse(text);}catch{ data = text; }
+      if(!res.ok) throw new Error((data && data.message) || text || ('HTTP '+res.status));
+      const pre = document.getElementById('sb-out'); pre.style.display='block'; pre.textContent = pretty(data);
+      const sum = document.getElementById('sb-summary');
+      const s = (data && data.summary) || '';
+      const score = (data && (data.score ?? ''));
+      sum.textContent = `Status: ${data.status || 'unknown'}${score!==''?` | Score: ${score}`:''}${s?` | ${s}`:''}`;
+      sum.style.display='block';
+    }
+    document.getElementById('sb-copy').onclick = () => copyText(document.getElementById('sb-out').textContent);
+    document.getElementById('sb-file-run').onclick = async ()=>{
+      const prov = document.getElementById('sb-provider').value;
+      const key = document.getElementById('sb-apikey').value.trim();
+      const f = document.getElementById('sb-file').files[0]; if(!f){ alert('Pick a file'); return; }
+      const btn = document.getElementById('sb-file-run'); setBusy(btn,true,'Submitting…');
+      document.getElementById('sb-file-err').style.display='none';
+      try{
+        const fd = new FormData();
+        fd.append('provider', prov);
+        if(key) fd.append('apiKey', key);
+        const baseUrl = document.getElementById('sb-baseurl').value.trim();
+        if(prov==='cuckoo' && baseUrl) fd.append('baseUrl', baseUrl);
+        fd.append('file', f);
+        const res = await fetch('/api/sandbox/upload', { method:'POST', body: fd });
+        await sandboxAfter(res);
+      }catch(err){ const e = document.getElementById('sb-file-err'); e.textContent = (err&&err.message)||String(err); e.style.display='block'; }
+      finally{ setBusy(btn,false); }
+    };
+    document.getElementById('sb-url-run').onclick = async ()=>{
+      const prov = document.getElementById('sb-provider').value;
+      const key = document.getElementById('sb-apikey').value.trim();
+      const url = document.getElementById('sb-url').value.trim(); if(!url){ alert('Enter URL'); return; }
+      const btn = document.getElementById('sb-url-run'); setBusy(btn,true,'Submitting…');
+      document.getElementById('sb-url-err').style.display='none';
+      try{
+        const body = { provider: prov, url };
+        if(key) body.apiKey = key;
+        const baseUrl = document.getElementById('sb-baseurl').value.trim();
+        if(prov==='cuckoo' && baseUrl) body.baseUrl = baseUrl;
+        const res = await fetch('/api/sandbox/url', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+        await sandboxAfter(res);
+      }catch(err){ const e = document.getElementById('sb-url-err'); e.textContent = (err&&err.message)||String(err); e.style.display='block'; }
+      finally{ setBusy(btn,false); }
+    };
+  </script>
+</body>
+</html>

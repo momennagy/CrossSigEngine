@@ -1,0 +1,43 @@
+# .NET build outputs
+bin/
+obj/
+
+# IDEs
+.vs/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# User-specific / OS
+*.user
+*.suo
+*.swp
+*.sln.docstates
+Thumbs.db
+.DS_Store
+
+# Outputs and artifacts
+out/
+*.log
+
+# Local data directory (contains sqlite db and logs)
+data/
+*.sqlite
+
+# Packages
+*.nupkg
+
+# Node/NPM (if any UI tooling added later)
+node_modules/
+
+# Docker
+*.env
+
+# Others
+*.coverage
+coverage/
+TestResults/

@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [5df552b10709]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "wesleykenttown.org.au"
+                                ],
+                    "uris":  [
+                                 "https://wesleykenttown.org.au/kil/NickelTru/home/virtual/rosyorange/www/tls/xd/zd/clients/login.php"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

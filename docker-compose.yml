@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./CrossSigEngine.Web/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      # - VT_API_KEY=your-key-here
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  webhook:
+    build:
+      context: .
+      dockerfile: ./CrossSigEngine.Cli/Dockerfile
+    command: ["serve-webhook", "--port", "9090", "--path", "/"]
+    ports:
+      - "9090:9090"

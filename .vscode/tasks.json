@@ -1,0 +1,54 @@
+{
+	"$schema": "vscode://schemas/tasks",
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Smoke Test",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"${workspaceFolder}/scripts/smoke.ps1"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Run CrossSigEngine Web (port 5057)",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"run",
+				"--project",
+				"d:\\Data Perso Adnane\\Coding\\VSCodeProject\\CrossSigEngine\\CrossSigEngine.Web\\CrossSigEngine.Web.csproj",
+				"--urls",
+				"http://localhost:5057"
+			],
+			"isBackground": true,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run CrossSigEngine Web (port 5081)",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"run",
+				"--no-build",
+				"--project",
+				"d:\\Data Perso Adnane\\Coding\\VSCodeProject\\CrossSigEngine\\CrossSigEngine.Web\\CrossSigEngine.Web.csproj",
+				"--urls",
+				"http://localhost:5081"
+			],
+			"isBackground": true,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		}
+	]
+}

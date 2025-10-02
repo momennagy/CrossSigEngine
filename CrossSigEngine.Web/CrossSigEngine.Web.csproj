@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CrossSigEngine.Core\CrossSigEngine.Core.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.Yara\CrossSigEngine.Generators.Yara.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.SnortSuricata\CrossSigEngine.Generators.SnortSuricata.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.Sigma\CrossSigEngine.Generators.Sigma.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.ClamAV\CrossSigEngine.Generators.ClamAV.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.IOC\CrossSigEngine.Generators.IOC.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.PEiD\CrossSigEngine.Generators.PEiD.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.CustomPattern\CrossSigEngine.Generators.CustomPattern.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.Zeek\CrossSigEngine.Generators.Zeek.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+  </ItemGroup>
+
+</Project>

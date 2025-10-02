@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [90cd2af29a4f]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "case-1002ubuss88gbi8125ta-ascap8ish9-29t09.vercel.app"
+                                ],
+                    "uris":  [
+                                 "http://case-1002ubuss88gbi8125ta-ascap8ish9-29t09.vercel.app/erfdsawsdesds.html"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

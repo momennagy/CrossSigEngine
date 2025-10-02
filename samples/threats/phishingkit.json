@@ -1,0 +1,28 @@
+{
+  "name": "Generic Phishing Kit",
+  "family": "PhishingKit",
+  "confidence": 0.7,
+  "sources": ["Internal:IR"],
+  "file": {
+    "hashes": [],
+    "strings": [
+      "login.php",
+      "Secure Login"
+    ],
+    "hex_patterns": [
+      "3C 66 6F 72 6D",  
+      "61 63 74 69 6F 6E 3D 5C 22 6C 6F 67 69 6E 5C 22"
+    ],
+    "pe_features": []
+  },
+  "network": {
+    "domains": ["secure-login.example"],
+    "uris": ["/login.php"]
+  },
+  "log": {
+    "windows": {
+      "event_id": [],
+      "cmdline_contains": []
+    }
+  }
+}

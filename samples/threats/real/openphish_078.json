@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [ccbcd7d0f990]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "pub-63e3df1c7a4b45d8a6e650ff4beefc08.r2.dev"
+                                ],
+                    "uris":  [
+                                 "http://pub-63e3df1c7a4b45d8a6e650ff4beefc08.r2.dev/index.html"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

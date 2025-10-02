@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [02469e64dcfd]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "www-two-step-account-manager.ubpages.com"
+                                ],
+                    "uris":  [
+                                 "https://www-two-step-account-manager.ubpages.com/bf2451a8-9e91-11f0-8621-964108bac2f0/"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

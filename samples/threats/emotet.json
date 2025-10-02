@@ -1,0 +1,32 @@
+{
+  "name": "Emotet Loader",
+  "family": "Emotet",
+  "confidence": 0.85,
+  "sources": ["abuse.ch:ThreatFox"],
+  "file": {
+    "hashes": [
+      "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ],
+    "strings": [
+      "EmotetService",
+      "mod_load",
+      "run_dll"
+    ],
+    "hex_patterns": [
+      "E8 ?? ?? ?? ?? 83 C4 04",
+      "68 74 74 70 3A 2F 2F"  
+    ],
+    "pe_features": ["pe32", "imports:wininet.dll"]
+  },
+  "network": {
+    "domains": ["update-checks.example"],
+    "uris": ["/config.bin"],
+    "ports": [80, 443]
+  },
+  "log": {
+    "windows": {
+      "event_id": [4688],
+      "cmdline_contains": ["regsvr32", "rundll32"]
+    }
+  }
+}

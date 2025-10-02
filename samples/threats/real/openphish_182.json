@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [01fbd653943a]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "www.e-receipts.co"
+                                ],
+                    "uris":  [
+                                 "https://www.e-receipts.co/signin?t=eyJhbGciOiJIUzI1NiJ9.eyJ0cmFja2luZ190b2tlbiI6Ijk5NGVkOWI5LTIyNTYtNDRjNi04MTE2LTlhYTRkMjVjZDk5NiIsImNlbGwiOiJodHRwczovL3FnYmZ3b3c2MGYuZXhlY3V0ZS1hcGkudXMtd2VzdC0yLmFtYXpvbmF3cy5jb20vcHJvZC9hcGkvcGhpc2hpbmdjYW1wYWlnbiIsImNhbXBhaWduX3Rva2VuIjoiZGUwNmRiZTgtZGY4Zi00ODkwLTkzMTEtNjY2YzAzYmFkMjdjIiwidGVzdF90b2tlbiI6ZmFsc2UsImV4dGVybmFsX3RyYWluaW5nIjpmYWxzZSwiZGlyZWN0X2RlbGl2ZXJ5Ijp0cnVlLCJpYXQiOjE3NTI4ODcwMjcsImlzcyI6Imh0dHBzOi8vYXBwLnBoaXNodGhyZWF0LmNvbSIsImV4cCI6MTc2MDY2MzAyN30.2brL6weyv8N7S56s09KBCXibBGlAGB0g8waTU0HnwGg"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

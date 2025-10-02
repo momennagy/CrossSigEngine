@@ -1,0 +1,46 @@
+{
+    "name":  "Demo Threat 001",
+    "family":  "DemoFamily2",
+    "confidence":  0.51,
+    "sources":  [
+                    "generated"
+                ],
+    "tags":  [
+                 "batch1"
+             ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+                                 "marker_001"
+                             ],
+                 "hex_patterns":  [
+                                      "41 42 43"
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+
+                                ],
+                    "uris":  [
+
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            }
+}

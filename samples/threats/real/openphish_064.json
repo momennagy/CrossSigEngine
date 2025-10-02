@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [e211db0d5e5a]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "bafybeifw5kxvnctx4vfa3a2zhjgu6huswmglbwyprb2wft2kbh6rpnwdfe.ipfs.dweb.link"
+                                ],
+                    "uris":  [
+                                 "https://bafybeifw5kxvnctx4vfa3a2zhjgu6huswmglbwyprb2wft2kbh6rpnwdfe.ipfs.dweb.link/WeTransfer.html"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

@@ -1,0 +1,47 @@
+﻿{
+    "name":  "OpenPhish URL [8467850918de]",
+    "family":  "Phishing",
+    "confidence":  0.5,
+    "sources":  [
+                    "openphish"
+                ],
+    "file":  {
+                 "hashes":  [
+
+                            ],
+                 "strings":  [
+
+                             ],
+                 "hex_patterns":  [
+
+                                  ],
+                 "pe_features":  [
+
+                                 ]
+             },
+    "network":  {
+                    "domains":  [
+                                    "68dc3bc4d86cf100084e33ff--tangerine-baklava-b04631.netlify.app"
+                                ],
+                    "uris":  [
+                                 "http://68dc3bc4d86cf100084e33ff--tangerine-baklava-b04631.netlify.app/"
+                             ],
+                    "ports":  [
+
+                              ]
+                },
+    "log":  {
+                "windows":  {
+                                "event_id":  [
+
+                                             ],
+                                "cmdline_contains":  [
+
+                                                     ]
+                            }
+            },
+    "tags":  [
+                 "phishing",
+                 "url"
+             ]
+}

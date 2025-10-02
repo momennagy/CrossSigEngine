@@ -1,0 +1,19 @@
+{
+  "name": "CobaltStrike Beacon",
+  "family": "CobaltStrike",
+  "confidence": 0.92,
+  "sources": ["CTI:VendorX", "Internal:RedTeam"],
+  "file": {
+    "hashes": ["sha256:0123456789abcdef"],
+    "strings": ["reflective loader", "beacon_start"],
+    "hex_patterns": ["6A 00 68 ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 C4 08"]
+  },
+  "network": {
+    "domains": ["example-cdn.com"],
+    "ja3": ["769,4865-4866,..."],
+    "uris": ["/pixel.gif"]
+  },
+  "log": {
+    "windows": {"event_id": [4688], "cmdline_contains": ["powershell -enc"]}
+  }
+}

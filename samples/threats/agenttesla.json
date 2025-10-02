@@ -1,0 +1,30 @@
+{
+  "name": "AgentTesla Stealer",
+  "family": "AgentTesla",
+  "confidence": 0.9,
+  "sources": ["OTX"],
+  "file": {
+    "hashes": [
+      "sha1:cccccccccccccccccccccccccccccccccccccccc"
+    ],
+    "strings": [
+      "AgentTesla",
+      "smtp_client"
+    ],
+    "hex_patterns": [
+      "55 8B EC 83 EC ?? 53 56"
+    ],
+    "pe_features": ["pe32", "upx_packed"]
+  },
+  "network": {
+    "domains": ["mailer-drop.example"],
+    "uris": ["/submit.php"],
+    "ports": [25, 587]
+  },
+  "log": {
+    "windows": {
+      "event_id": [4688],
+      "cmdline_contains": ["outlook.exe"]
+    }
+  }
+}

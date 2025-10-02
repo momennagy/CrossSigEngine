@@ -1,0 +1,30 @@
+{
+  "name": "TrickBot Module",
+  "family": "TrickBot",
+  "confidence": 0.88,
+  "sources": ["abuse.ch:MalwareBazaar"],
+  "file": {
+    "hashes": [
+      "md5:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ],
+    "strings": [
+      "TrickLoader",
+      "core_bot"
+    ],
+    "hex_patterns": [
+      "6A 00 68 ?? ?? E8 ?? ?? 83 C4 08"
+    ],
+    "pe_features": ["pe32", "tls_callbacks"]
+  },
+  "network": {
+    "domains": ["cdn-sync.example"],
+    "uris": ["/gate.php"],
+    "ports": [443]
+  },
+  "log": {
+    "windows": {
+      "event_id": [4688],
+      "cmdline_contains": ["powershell -enc"]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CrossSigEngine.Core\CrossSigEngine.Core.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.Yara\CrossSigEngine.Generators.Yara.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.SnortSuricata\CrossSigEngine.Generators.SnortSuricata.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.Sigma\CrossSigEngine.Generators.Sigma.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.ClamAV\CrossSigEngine.Generators.ClamAV.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.IOC\CrossSigEngine.Generators.IOC.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.PEiD\CrossSigEngine.Generators.PEiD.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.CustomPattern\CrossSigEngine.Generators.CustomPattern.csproj" />
+    <ProjectReference Include="..\CrossSigEngine.Generators.Zeek\CrossSigEngine.Generators.Zeek.csproj" />
+  </ItemGroup>
+
+</Project>
